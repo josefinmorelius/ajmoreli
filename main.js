@@ -3,9 +3,9 @@ function createscene ()
 {
 
     const renderer = new THREE.WebGLRenderer();
-    renderer.setSize( window.innerWidth, window.innerHeight );
-    renderer.setClearColor( new THREE.Color(0xFFFFFF) );
-    document.body.appendChild(renderer.domElement);
+    //renderer.setSize( window.innerWidth, window.innerHeight );
+    //renderer.setClearColor( new THREE.Color(0xFFFFFF) );
+    //document.body.appendChild(renderer.domElement);
 
     const range = 50;
 
@@ -17,13 +17,13 @@ function createscene ()
 
     const camera = new THREE.PerspectiveCamera(range, camera_h_w, near, far);
 
-    camera.position.set( 1, 1.5, 2 );
-    camera.lookAt(0,0,0);
+    //camera.position.set( 1, 1.5, 2 );
+    //camera.lookAt(0,0,0);
 
-    var cameraControls = new THREE.OrbitControls( camera, renderer.domElement );
-    cameraControls.target.set( 0, 0, 0 );
+    //var cameraControls = new THREE.OrbitControls( camera, renderer.domElement );
+    //cameraControls.target.set( 0, 0, 0 );
 
-    window.addEventListener('resize', updateAspectRatio );
+    //window.addEventListener('resize', updateAspectRatio );
 
     const scene = new THREE.Scene();
 
