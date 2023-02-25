@@ -1,4 +1,6 @@
 
+createscene();
+
 function createscene () 
 {
 
