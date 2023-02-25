@@ -1,9 +1,8 @@
 
 createscene();
 
-function createscene () 
+function createscene() 
 {
-
     const renderer = new THREE.WebGLRenderer();
     //renderer.setSize( window.innerWidth, window.innerHeight );
     //renderer.setClearColor( new THREE.Color(0xFFFFFF) );
@@ -40,7 +39,7 @@ function createscene ()
     const box = new THREE.Mesh(figure, figure_material);
     scene.add(box);
 
-    renderer.render(scene, camera)
+    renderer.render(scene, camera);
     document.getElementById('container').appendChild( renderer.domElement );
 
 };
