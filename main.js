@@ -33,13 +33,13 @@ function createscene ()
 
     const figure = new THREE.BoxGeometry(width, height, depth);
 
-    const material = new THREE.MeshBasicMaterial({color: C5C2CC})
+    const figure_material = new THREE.MeshBasicMaterial({color: C5C2CC})
 
-    const box = new THREE.Mesh(figure, material);
+    const box = new THREE.Mesh(figure, figure_material);
     scene.add(box);
 
     renderer.render(scene, camera)
-    document.body.appendChild(renderer.domElement);
+    document.getElementById('container').appendChild( renderer.domElement );
 
 };
 
