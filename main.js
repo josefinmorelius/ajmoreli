@@ -1,10 +1,7 @@
-
-
-
 function createscene() 
 {
     const renderer = new THREE.WebGLRenderer();
-    //renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setSize( window.innerWidth, window.innerHeight );
     //renderer.setClearColor( new THREE.Color(0xFFFFFF) );
     //document.body.appendChild(renderer.domElement);
 
@@ -45,6 +42,8 @@ function createscene()
 };
 
 createscene();
+
+
 
 
 
