@@ -3,11 +3,18 @@
 		<meta charset='utf-8'>
 		<title>My 3D object</title>
 		<style>
-			body {
-				background-color: rgb(255, 255, 255);
-				margin: 0px;
-				overflow: hidden;
-			}
+			html,
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+            body {
+                min-height: 100vh;
+                display: center;
+                align-items: center;
+                justify-content: center;
+            }
 		</style>
 	</head>
 	<body>
@@ -15,6 +22,8 @@
 		<!-- Scripts de biblioteca -->
 		<script src="lib/three.min_r140.js"></script>
 		<script src="lib/OrbitControls.js"></script>
+        <script src="lib/OBJLoader.js"></script>
+        <script src="js/water.js"></script>
 
 		<script src="main.js"></script>
 
