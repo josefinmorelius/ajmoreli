@@ -1,9 +1,12 @@
 var renderer, scene, camera;
 var boat_ob, fish, fish_2, cubo1, cubo2, cubo3, cubo4, cubo5, cubo6;
 
-const loader_OBJ = new THREE.OBJLoader();
-const loader_material = new THREE.TextureLoader();
+var loader_OBJ = new THREE.OBJLoader();
+var loader_material = new THREE.TextureLoader();
 var loader = new THREE.FontLoader();
+const helper = new THREE.AxesHelper(20);
+
+
 
 function createscene() 
 {
@@ -30,11 +33,9 @@ function createscene()
     cameraControls.maxDistance = 50;
 
     scene = new THREE.Scene();
+    scene.add(helper)
 };
 
-function update (){
-
-};
 
 let positionY = 0;
 let direction = 1;
@@ -48,15 +49,23 @@ function render(){
     } else if (positionY <= -2) {
         direction = 2;
     };
+  
+    if (fish == undefined) {
+        console.log("loading")
+    }
+    else{
 
     fish.position.setY(positionY);
     fish_2.position.setY(positionY);
- 
-    detect_collision();
-    update();
-    renderer.render(scene, camera);
+    if (cubo1 == undefined || boat_ob == undefined) {
+        console.log("loading")
+    }
+    else{
+    detect_collision(); }
+
+    renderer.render(scene, camera);}
     
-    
+      
 }
 
 // create skybox
@@ -83,7 +92,6 @@ function create_skybox(){
 
 }
 
-
 function boat(){
     loader_OBJ.load(
 
@@ -95,7 +103,6 @@ function boat(){
             boat_ob_fun.position.set(7,-1,0);  
             boat_ob = boat_ob_fun;
             scene.add( boat_ob );  
-  
             
         },
         function ( error ) {
@@ -168,8 +175,13 @@ loader.load('fonts/helvetiker_regular.typeface.json', function(font){
         var text_mesh = new THREE.Mesh(text_git, text_material);
         text_mesh.rotateX = 0.2;
         text_mesh.position.y = 5;
-    
+
+        if (cubo1 == undefined) {
+            console.log("loading")
+        }
+        else{
         cubo1.add(text_mesh);  
+         };
 
     var text_facebook= new THREE.TextGeometry( 'Facebook', {
             font: font,
@@ -181,7 +193,13 @@ loader.load('fonts/helvetiker_regular.typeface.json', function(font){
         text_mesh.position.z = 0.2;
         text_mesh.position.y = 5;
 
-        cubo4.add(text_mesh);
+        if (cubo4== undefined) {
+            console.log("loading")
+        }
+        else{
+        cubo4.add(text_mesh);  
+         };
+        
     
         var text_instagram = new THREE.TextGeometry( 'Instagram', {
             font: font,
@@ -194,7 +212,13 @@ loader.load('fonts/helvetiker_regular.typeface.json', function(font){
         text_mesh.rotateX = 0.2;
         text_mesh.position.y = 5;
     
+        
+        if (cubo5 == undefined) {
+            console.log("loading")
+        }
+        else{
         cubo5.add(text_mesh);  
+         };
 
     var text_linkedin= new THREE.TextGeometry( 'LinkedIn', {
             font: font,
@@ -206,7 +230,13 @@ loader.load('fonts/helvetiker_regular.typeface.json', function(font){
         text_mesh.position.z = 0.2;
         text_mesh.position.y = 5;
 
-        cubo6.add(text_mesh);}
+        if (cubo6 == undefined) {
+            console.log("loading")
+        }
+        else{
+            cubo6.add(text_mesh);  
+         };
+       ;}
         );
  
 };
@@ -227,8 +257,8 @@ loader_material.load(
     },
 	
 );
-}
-
+};
+function fish_func(){
 loader_OBJ.load(
 
 	'models/Mesh_Goldfish.obj',
@@ -244,10 +274,7 @@ loader_OBJ.load(
         scene.add(fish_2);
 
 	},
-);
-
-console.log("2", fish_2);
-
+);};
 
 document.addEventListener('keydown', (event) => {
     switch (event.code) {
@@ -302,8 +329,7 @@ document.addEventListener('keydown', (event) => {
 createscene();
 create_skybox();
 plane();
-
 boat();
 islands();
-
+fish_func();
 render();
