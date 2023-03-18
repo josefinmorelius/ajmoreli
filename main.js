@@ -1,20 +1,34 @@
 var renderer, scene, camera;
+
 var boat_ob, fish, fish_2, cubo1, cubo2, cubo3, cubo4, cubo5, cubo6;
 
 var loader_OBJ = new THREE.OBJLoader();
 var loader_material = new THREE.TextureLoader();
 var loader = new THREE.FontLoader();
-const helper = new THREE.AxesHelper(20);
-
 
 
 function createscene() 
 {
     renderer = new THREE.WebGLRenderer();
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.BasicShadowMap;
     renderer.setSize( window.innerWidth, window.innerHeight );
-    renderer.setClearColor( new THREE.Color(0xFFFFFF), 1.0 ); // set background color 
+    renderer.setClearColor( new THREE.Color('white'), 1.0 ); // set background color 
     document.getElementById('container').appendChild(renderer.domElement );
+    const light = new THREE.DirectionalLight({color: 'red'});
+    const light_a = new THREE.AmbientLight(0xfffff,0.1);
 
+    light.shadow.camera.left = -20;
+    light.shadow.camera.right = 20;
+    light.shadow.camera.top = 20;
+    light.shadow.camera.bottom = -20;
+    light.shadow.camera.near = 0.1;
+    light.shadow.camera.far = 50;
+    
+    light.castShadow = true;
+    light.shadow.mapSize.width = 1000; 
+    light.shadow.mapSize.height = 1000; 
+    light.position.set(0, 30, 20);
     const range = 75;
 
     camera_h_w = window.innerWidth / window.innerHeight;
@@ -33,7 +47,14 @@ function createscene()
     cameraControls.maxDistance = 50;
 
     scene = new THREE.Scene();
-    scene.add(helper)
+    scene.add(light);
+    scene.add(light_a);
+    
+
+    light.shadow.camera.near = 0.01;
+    light.shadow.camera.far = 5000;
+    const helper = new THREE.CameraHelper(light.shadow.camera);
+    scene.add(helper);
 };
 
 
@@ -57,6 +78,7 @@ function render(){
 
     fish.position.setY(positionY);
     fish_2.position.setY(positionY);
+    
     if (cubo1 == undefined || boat_ob == undefined) {
         console.log("loading")
     }
@@ -101,7 +123,16 @@ function boat(){
             boat_ob_fun.scale.x = boat_ob_fun.scale.y = boat_ob_fun.scale.z = 0.005;
             boat_ob_fun.rotateX(-1.55);
             boat_ob_fun.position.set(7,-1,0);  
+            /*boat_ob_fun.traverse(function(node) {
+                if(node.isMesh)
+                node.castShadow = true;
+            })*/
+            boat_ob_fun.castShadow = true; 
+            boat_ob_fun.traverse( function( object ) { if ( object instanceof THREE.Mesh ) { object.castShadow = true; } } );
             boat_ob = boat_ob_fun;
+
+            boat_ob.castShadow = true;
+            console.log(boat_ob_fun);
             scene.add( boat_ob );  
             
         },
@@ -112,28 +143,40 @@ function boat(){
     
     }
 
+
+
 function islands(){
 loader_material.load(
 
 	'images/sand.jpg',
   
 	function ( sand ) {
+    var material = new THREE.MeshStandardMaterial( { map: sand,});
 
 	const globe1 = new THREE.SphereGeometry(1, 100, 100, Math.PI/2, Math.PI*2, 0, Math.PI/2 );
-    
-    var material = new THREE.MeshBasicMaterial( { map: sand });
-
     cubo1 = new THREE.Mesh(globe1, material);
+    cubo1.castShadow = true;
+    cubo1.receiveShadow = true;
     const globe2 = new THREE.SphereGeometry(2, 100, 100, Math.PI/2, Math.PI*2, 0, Math.PI/2 );
     cubo2 = new THREE.Mesh(globe2, material);
+    cubo2.castShadow = true;
+    cubo2.receiveShadow = true;
     const globe3 = new THREE.SphereGeometry(1.5, 100, 100, Math.PI/2, Math.PI*2, 0, Math.PI/2 );
     cubo3 = new THREE.Mesh(globe3, material);
+    cubo3.castShadow = true;
+    cubo3.receiveShadow = true;
     const globe4 = new THREE.SphereGeometry(1, 100, 100, Math.PI/2, Math.PI*2, 0, Math.PI/2 );
     cubo4 = new THREE.Mesh(globe4, material);
+    cubo4.castShadow = true;
+    cubo4.receiveShadow = true;
     const globe5 = new THREE.SphereGeometry(2, 100, 100, Math.PI/2, Math.PI*2, 0, Math.PI/2 );
     cubo5 = new THREE.Mesh(globe5, material);
+    cubo5.castShadow = true;
+    cubo5.receiveShadow = true;
     const globe6 = new THREE.SphereGeometry(1.5, 100, 100, Math.PI/2, Math.PI*2, 0, Math.PI/2 );
     cubo6 = new THREE.Mesh(globe6, material);
+    cubo6.castShadow = true;
+    cubo6.receiveShadow = true;
     
     scene.add(cubo1);
     //window.cubo1 = cubo1;
@@ -175,6 +218,7 @@ loader.load('fonts/helvetiker_regular.typeface.json', function(font){
         var text_mesh = new THREE.Mesh(text_git, text_material);
         text_mesh.rotateX = 0.2;
         text_mesh.position.y = 5;
+        text_mesh.castShadow = true;
 
         if (cubo1 == undefined) {
             console.log("loading")
@@ -192,6 +236,7 @@ loader.load('fonts/helvetiker_regular.typeface.json', function(font){
         var text_mesh = new THREE.Mesh(text_facebook, text_material);
         text_mesh.position.z = 0.2;
         text_mesh.position.y = 5;
+        text_mesh.castShadow = true;
 
         if (cubo4== undefined) {
             console.log("loading")
@@ -211,6 +256,7 @@ loader.load('fonts/helvetiker_regular.typeface.json', function(font){
         var text_mesh = new THREE.Mesh(text_instagram, text_material);
         text_mesh.rotateX = 0.2;
         text_mesh.position.y = 5;
+        text_mesh.castShadow = true;
     
         
         if (cubo5 == undefined) {
@@ -229,6 +275,7 @@ loader.load('fonts/helvetiker_regular.typeface.json', function(font){
         var text_mesh = new THREE.Mesh(text_linkedin, text_material);
         text_mesh.position.z = 0.2;
         text_mesh.position.y = 5;
+        text_mesh.castShadow = true;
 
         if (cubo6 == undefined) {
             console.log("loading")
@@ -248,10 +295,12 @@ loader_material.load(
   
 	// called when resource is loaded
 	function ( water ) {
-    const plane = new THREE.PlaneGeometry(1000,1000);
-    var material = new THREE.MeshBasicMaterial( { map: water });
-    const create_plane = new THREE.Mesh(plane, material);
+    var plane = new THREE.PlaneGeometry(1000,1000);
+    var material = new THREE.MeshStandardMaterial( { map: water , vertexColors: THREE.NoColors});
+    var create_plane = new THREE.Mesh(plane, material);
+    create_plane.receiveShadow = true;
     create_plane.rotateX(-Math.PI/2);
+   
     scene.add(create_plane);
 
     },
@@ -268,13 +317,21 @@ loader_OBJ.load(
         fish_ob.rotateX(-1);
         fish_ob.position.set(10, positionY, 5);
         fish = fish_ob;
-        scene.add(fish);
+        fish.traverse( function( object ) { if ( object instanceof THREE.Mesh ) { object.castShadow = true; } } );
+        
+        fish.castShadow = true;
+        
         fish_2 = fish_ob.clone();
+        fish_2.traverse( function( object ) { if ( object instanceof THREE.Mesh ) { object.castShadow = true; } } );
+        
+        fish_2.castShadow = true;
         fish_2.position.set(-20, positionY, 10);
-        scene.add(fish_2);
+        
 
 	},
-);};
+);
+
+};
 
 document.addEventListener('keydown', (event) => {
     switch (event.code) {
