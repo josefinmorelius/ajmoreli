@@ -19,22 +19,27 @@ function createscene()
     renderer.shadowMap.type = THREE.BasicShadowMap;
 
     renderer.setSize( window.innerWidth, window.innerHeight );
+    
     document.getElementById('container').appendChild(renderer.domElement );
 
     const light = new THREE.DirectionalLight({color: 'red'});
-    light.shadow.camera.left = -20;
-    light.shadow.camera.right = 20;
-    light.shadow.camera.top = 20;
-    light.shadow.camera.bottom = -20;
+    light.castShadow = true;
+    light.shadow.camera.left = -100;
+    light.shadow.camera.right = 100;
+    light.shadow.camera.top = 100;
+    light.shadow.camera.bottom = -100;
     light.shadow.camera.near = 0.1;
     light.shadow.camera.far = 50;
     
-    light.castShadow = true;
-    light.shadow.mapSize.width = 1000; 
-    light.shadow.mapSize.height = 1000; 
+    
+    light.shadow.mapSize.width = 20000; 
+    light.shadow.mapSize.height = 20000; 
     light.position.set(0, 30, 20);
     light.shadow.camera.near = 0.01;
     light.shadow.camera.far = 5000;
+    
+    
+    console.log(light);
 
     scene.add(light);
 
@@ -54,6 +59,8 @@ function createscene()
     cameraControls.target.set( 0, 0, 0 );
     cameraControls.minDistance = 10;
     cameraControls.maxDistance = 50;
+    
+    
 };
 
 count = 0;
