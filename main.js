@@ -2,11 +2,11 @@
 var renderer, scene, camera;
 
 // create global objects 
-var boat_ob, fish, fish_2, cubo1, cubo2, cubo3, cubo4, cubo5, cubo6;
+var boat_ob, fish, fish_2, island_1, island_2, island_3, island_4, island_5, island_6;
 
 var loader_OBJ = new THREE.OBJLoader();
 var loader_material = new THREE.TextureLoader();
-var loader = new THREE.FontLoader();
+var loader_font= new THREE.FontLoader();
 
 // create the scene 
 
@@ -23,6 +23,7 @@ function createscene()
     document.getElementById('container').appendChild(renderer.domElement );
 
     const light = new THREE.DirectionalLight({color: 'red'});
+
     light.castShadow = true;
     light.shadow.camera.left = -100;
     light.shadow.camera.right = 100;
@@ -30,7 +31,6 @@ function createscene()
     light.shadow.camera.bottom = -100;
     light.shadow.camera.near = 0.1;
     light.shadow.camera.far = 50;
-    
     
     light.shadow.mapSize.width = 20000; 
     light.shadow.mapSize.height = 20000; 
@@ -60,7 +60,6 @@ function createscene()
     cameraControls.minDistance = 10;
     cameraControls.maxDistance = 50;
     
-    
 };
 
 count = 0;
@@ -87,13 +86,12 @@ function render(){
     fish.position.setY(positionY);
     fish_2.position.setY(positionY);
     
-    if (cubo1 == undefined || boat_ob == undefined) {
+    if (island_1 == undefined || boat_ob == undefined) {
         console.log("loading")
     }
 
     else {
         count += 1;
-        
         // just want to add the text once when the islands had been loaded
         if (count == 1){
             text_to_islands();
@@ -147,9 +145,7 @@ function boat(){
             boat_ob_fun.rotateY(-1.55);
             boat_ob_fun.position.set(20,-2,0);  
             const material = new THREE.MeshStandardMaterial({ map: boat_texture });
-            boat_ob_fun.traverse((child) => {
-                if (child instanceof THREE.Mesh) {
-                  child.material = material;
+            boat_ob_fun.traverse(function(obj){ if (obj instanceof THREE.Mesh) {obj.material = material;
                 }
               }); 
             boat_ob_fun.castShadow = true; 
@@ -176,46 +172,46 @@ loader_material.load(
     var material = new THREE.MeshStandardMaterial( { map: sand,});
 
 	const globe1 = new THREE.SphereGeometry(1, 100, 100, Math.PI/2, Math.PI*2, 0, Math.PI/2 );
-    cubo1 = new THREE.Mesh(globe1, material);
-    cubo1.castShadow = true;
-    cubo1.receiveShadow = true;
+    island_1 = new THREE.Mesh(globe1, material);
+    island_1.castShadow = true;
+    island_1.receiveShadow = true;
     const globe2 = new THREE.SphereGeometry(2, 100, 100, Math.PI/2, Math.PI*2, 0, Math.PI/2 );
-    cubo2 = new THREE.Mesh(globe2, material);
-    cubo2.castShadow = true;
-    cubo2.receiveShadow = true;
+    island_2 = new THREE.Mesh(globe2, material);
+    island_2.castShadow = true;
+    island_2.receiveShadow = true;
     const globe3 = new THREE.SphereGeometry(1.5, 100, 100, Math.PI/2, Math.PI*2, 0, Math.PI/2 );
-    cubo3 = new THREE.Mesh(globe3, material);
-    cubo3.castShadow = true;
-    cubo3.receiveShadow = true;
+    island_3 = new THREE.Mesh(globe3, material);
+    island_3.castShadow = true;
+    island_3.receiveShadow = true;
     const globe4 = new THREE.SphereGeometry(1, 100, 100, Math.PI/2, Math.PI*2, 0, Math.PI/2 );
-    cubo4 = new THREE.Mesh(globe4, material);
-    cubo4.castShadow = true;
-    cubo4.receiveShadow = true;
+    island_4 = new THREE.Mesh(globe4, material);
+    island_4.castShadow = true;
+    island_4.receiveShadow = true;
     const globe5 = new THREE.SphereGeometry(2, 100, 100, Math.PI/2, Math.PI*2, 0, Math.PI/2 );
-    cubo5 = new THREE.Mesh(globe5, material);
-    cubo5.castShadow = true;
-    cubo5.receiveShadow = true;
+    island_5 = new THREE.Mesh(globe5, material);
+    island_5.castShadow = true;
+    island_5.receiveShadow = true;
     const globe6 = new THREE.SphereGeometry(1.5, 100, 100, Math.PI/2, Math.PI*2, 0, Math.PI/2 );
-    cubo6 = new THREE.Mesh(globe6, material);
-    cubo6.castShadow = true;
-    cubo6.receiveShadow = true;
+    island_6 = new THREE.Mesh(globe6, material);
+    island_6.castShadow = true;
+    island_6.receiveShadow = true;
     
-    scene.add(cubo1);
-    scene.add(cubo2); // the one in the middle
-    scene.add(cubo3);
-    scene.add(cubo4);
-    scene.add(cubo5);
-    scene.add(cubo6);
+    scene.add(island_1);
+    scene.add(island_2); // the one in the middle
+    scene.add(island_3);
+    scene.add(island_4);
+    scene.add(island_5);
+    scene.add(island_6);
     
-    cubo1.position.x = 15;
-    cubo1.position.z = -5;
-    cubo1.position.x = 25;
-    cubo3.position.z = 22;
-    cubo4.position.x = -25;
-    cubo5.position.z = 10;
-    cubo5.position.x = 15;
-    cubo6.position.x = -20;
-    cubo6.position.z = -10;  
+    island_1.position.x = 15;
+    island_1.position.z = -5;
+    island_1.position.x = 25;
+    island_3.position.z = 22;
+    island_4.position.x = -25;
+    island_5.position.z = 10;
+    island_5.position.x = 15;
+    island_6.position.x = -20;
+    island_6.position.z = -10;  
     
 	},
 	function ( error ) {
@@ -227,7 +223,7 @@ loader_material.load(
 // before adding the text
 
 function text_to_islands(){
-loader.load('fonts/helvetiker_regular.typeface.json', 
+loader_font.load('fonts/helvetiker_regular.typeface.json', 
     function(font){
         var text_material = new THREE.MeshPhongMaterial({color: 'pink'});
 
@@ -244,11 +240,11 @@ loader.load('fonts/helvetiker_regular.typeface.json',
             text_mesh.receiveShadow = true;
             text_mesh.lookAt( camera.position );
 
-            if (cubo1 == undefined) {
+            if (island_1 == undefined) {
                 console.log("loading")
             }
             else{
-            cubo1.add(text_mesh);  
+            island_1.add(text_mesh);  
             };
 
             var text_facebook= new THREE.TextGeometry( 'Facebook', {
@@ -264,11 +260,11 @@ loader.load('fonts/helvetiker_regular.typeface.json',
             text_mesh.castShadow = true;
             text_mesh.receiveShadow = true;
 
-            if (cubo4== undefined) {
+            if (island_4== undefined) {
                 console.log("loading")
             }
             else{
-            cubo4.add(text_mesh);  
+            island_4.add(text_mesh);  
             };
             
             var text_instagram = new THREE.TextGeometry( 'Instagram', {
@@ -285,11 +281,11 @@ loader.load('fonts/helvetiker_regular.typeface.json',
             text_mesh.receiveShadow = true;
         
             
-            if (cubo5 == undefined) {
+            if (island_5 == undefined) {
                 console.log("loading")
             }
             else{
-            cubo5.add(text_mesh);  
+            island_5.add(text_mesh);  
             };
 
             var text_linkedin= new THREE.TextGeometry( 'LinkedIn', {
@@ -304,11 +300,11 @@ loader.load('fonts/helvetiker_regular.typeface.json',
             text_mesh.castShadow = true;
             text_mesh.lookAt( camera.position );
 
-            if (cubo6 == undefined) {
+            if (island_6 == undefined) {
                 console.log("loading")
             }
             else{
-                cubo6.add(text_mesh);  
+                island_6.add(text_mesh);  
             };
         
             var text_tiktok = new THREE.TextGeometry( 'TikTok', {
@@ -325,11 +321,11 @@ loader.load('fonts/helvetiker_regular.typeface.json',
             text_mesh.receiveShadow = true;
             text_mesh.lookAt( camera.position );
 
-            if (cubo3 == undefined) {
+            if (island_3 == undefined) {
                 console.log("loading")
             }
             else{
-            cubo3.add(text_mesh);  
+            island_3.add(text_mesh);  
                 }; 
 
             var text_youtube = new THREE.TextGeometry( 'YouTube', {
@@ -346,11 +342,11 @@ loader.load('fonts/helvetiker_regular.typeface.json',
             text_mesh.receiveShadow = true;
             text_mesh.lookAt( camera.position );
 
-            if (cubo2 == undefined) {
+            if (island_2 == undefined) {
                 console.log("loading")
             }
             else{
-            cubo2.add(text_mesh);  
+            island_2.add(text_mesh);  
                 }; 
     })};
         
@@ -383,9 +379,7 @@ loader_OBJ.load(
 
         const material = new THREE.MeshStandardMaterial({ map: fish_texture });
         fish.traverse( function( object ) { if ( object instanceof THREE.Mesh ) { object.castShadow = true; } } );
-        fish.traverse((child) => {
-            if (child instanceof THREE.Mesh) {
-              child.material = material;
+        fish.traverse(function(object) { if (object instanceof THREE.Mesh) {object.material = material;
             }
           });
         
@@ -423,12 +417,12 @@ document.addEventListener('keydown', (event) => {
   function detect_collision (){
 
     var boat_bb = new THREE.Box3().setFromObject(boat_ob); // Boat 
-    var island_b1 = new THREE.Box3().setFromObject(cubo1); // Git Hub
-    var island_b2 = new THREE.Box3().setFromObject(cubo2); // YouTube
-    var island_b3 = new THREE.Box3().setFromObject(cubo3); // TikTok 
-    var island_b4 = new THREE.Box3().setFromObject(cubo4); // Facebook
-    var island_b5 = new THREE.Box3().setFromObject(cubo5); // Instagram 
-    var island_b6 = new THREE.Box3().setFromObject(cubo6); // LinkedIn
+    var island_b1 = new THREE.Box3().setFromObject(island_1); // Git Hub
+    var island_b2 = new THREE.Box3().setFromObject(island_2); // YouTube
+    var island_b3 = new THREE.Box3().setFromObject(island_3); // TikTok 
+    var island_b4 = new THREE.Box3().setFromObject(island_4); // Facebook
+    var island_b5 = new THREE.Box3().setFromObject(island_5); // Instagram 
+    var island_b6 = new THREE.Box3().setFromObject(island_6); // LinkedIn
  
 
     var collision1 = boat_bb.intersectsBox(island_b1);
