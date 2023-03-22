@@ -8,7 +8,15 @@ var loader_OBJ = new THREE.OBJLoader();
 var loader_material = new THREE.TextureLoader();
 var loader_font= new THREE.FontLoader();
 
-// create the scene 
+// use this value to only call on the function that adds text to islands once 
+count = 0;
+
+// values to use for moving the fish up and down
+let positionY = 0;
+let direction = 1;
+const cameraOffset = new THREE.Vector3(20,20,0);
+
+// create the scene with light, camera and scene
 
 function createscene() 
 {
@@ -37,9 +45,6 @@ function createscene()
     light.position.set(0, 30, 20);
     light.shadow.camera.near = 0.01;
     light.shadow.camera.far = 5000;
-    
-    
-    console.log(light);
 
     scene.add(light);
 
@@ -62,14 +67,16 @@ function createscene()
     
 };
 
-count = 0;
-let positionY = 0;
-let direction = 1;
-const cameraOffset = new THREE.Vector3(20,20,0);
 
-// render the scene and 
+// render the scene and call the update function  
 function render(){
     requestAnimationFrame(render);
+    update();
+    renderer.render(scene, camera);}
+  
+
+function update (){
+
     positionY += 0.02 * direction;
     
     // animation of fishes 
@@ -97,7 +104,7 @@ function render(){
             text_to_islands();
     };
 
-    // call on the collision function
+    // call on the collision function when objecs are defined 
     detect_collision(); 
 
     // target the camera on the boat 
@@ -106,12 +113,11 @@ function render(){
     camera.position.copy(boatPosition).add(cameraOffset);
     };
 
-    renderer.render(scene, camera);}
-  
-}
+}; }
 
 // create the skybox
 function create_skybox(){
+
     let skybox_array = [];
     let skybox_loader_back = new THREE.TextureLoader().load('images/DaylightBox_Back.png');
     let skybox_loader_bottom = new THREE.TextureLoader().load('images/DaylightBox_Bottom.png');
@@ -134,6 +140,7 @@ function create_skybox(){
 }
 
 // create the boat and its texture
+// boat from this source: https://poly.pizza/m/7AOnch2wREC
 const boat_texture = loader_material.load('models/Sailboat.png');
 function boat(){
     loader_OBJ.load(
@@ -141,7 +148,6 @@ function boat(){
         'models/Sailboat.obj',
         function ( boat_ob_fun ) {
             boat_ob_fun.scale.x = boat_ob_fun.scale.y = boat_ob_fun.scale.z = 0.3;
-            //boat_ob_fun.rotateX(-1.55);
             boat_ob_fun.rotateY(-1.55);
             boat_ob_fun.position.set(20,-2,0);  
             const material = new THREE.MeshStandardMaterial({ map: boat_texture });
@@ -162,11 +168,12 @@ function boat(){
 
 
 // creating all the islands 
+// texture from this page: https://unsplash.com/photos/DHjVnAGgKjw
 
 function islands(){
 loader_material.load(
 
-	'images/sand.jpg',
+	'images/rock.jpg',
   
 	function ( sand ) {
     var material = new THREE.MeshStandardMaterial( { map: sand,});
@@ -197,7 +204,7 @@ loader_material.load(
     island_6.receiveShadow = true;
     
     scene.add(island_1);
-    scene.add(island_2); // the one in the middle
+    scene.add(island_2); 
     scene.add(island_3);
     scene.add(island_4);
     scene.add(island_5);
@@ -215,12 +222,11 @@ loader_material.load(
     
 	},
 	function ( error ) {
-		console.log('');
+		console.log('error');
     }
 ) };
 
-// add the personal page texts to the islands and check if the islands has been loaded to 100 %
-// before adding the text
+// add the personal page texts to the islands 
 
 function text_to_islands(){
 loader_font.load('fonts/helvetiker_regular.typeface.json', 
@@ -240,12 +246,7 @@ loader_font.load('fonts/helvetiker_regular.typeface.json',
             text_mesh.receiveShadow = true;
             text_mesh.lookAt( camera.position );
 
-            if (island_1 == undefined) {
-                console.log("loading")
-            }
-            else{
             island_1.add(text_mesh);  
-            };
 
             var text_facebook= new THREE.TextGeometry( 'Facebook', {
                 font: font,
@@ -260,13 +261,8 @@ loader_font.load('fonts/helvetiker_regular.typeface.json',
             text_mesh.castShadow = true;
             text_mesh.receiveShadow = true;
 
-            if (island_4== undefined) {
-                console.log("loading")
-            }
-            else{
             island_4.add(text_mesh);  
-            };
-            
+   
             var text_instagram = new THREE.TextGeometry( 'Instagram', {
                 font: font,
                 size: 0.6,
@@ -280,14 +276,8 @@ loader_font.load('fonts/helvetiker_regular.typeface.json',
             text_mesh.castShadow = true;
             text_mesh.receiveShadow = true;
         
-            
-            if (island_5 == undefined) {
-                console.log("loading")
-            }
-            else{
             island_5.add(text_mesh);  
-            };
-
+  
             var text_linkedin= new THREE.TextGeometry( 'LinkedIn', {
                 font: font,
                 size: 0.6,
@@ -300,12 +290,7 @@ loader_font.load('fonts/helvetiker_regular.typeface.json',
             text_mesh.castShadow = true;
             text_mesh.lookAt( camera.position );
 
-            if (island_6 == undefined) {
-                console.log("loading")
-            }
-            else{
-                island_6.add(text_mesh);  
-            };
+            island_6.add(text_mesh);  
         
             var text_tiktok = new THREE.TextGeometry( 'TikTok', {
             font: font,
@@ -321,13 +306,8 @@ loader_font.load('fonts/helvetiker_regular.typeface.json',
             text_mesh.receiveShadow = true;
             text_mesh.lookAt( camera.position );
 
-            if (island_3 == undefined) {
-                console.log("loading")
-            }
-            else{
             island_3.add(text_mesh);  
-                }; 
-
+                
             var text_youtube = new THREE.TextGeometry( 'YouTube', {
                 font: font,
                 size: 0.6,
@@ -342,32 +322,30 @@ loader_font.load('fonts/helvetiker_regular.typeface.json',
             text_mesh.receiveShadow = true;
             text_mesh.lookAt( camera.position );
 
-            if (island_2 == undefined) {
-                console.log("loading")
-            }
-            else{
             island_2.add(text_mesh);  
-                }; 
+        
     })};
         
-// create the plane and its materil
+// create the plane and its material
+// water images from: https://unsplash.com/photos/DSwBHyWKiVw
 function plane(){
 loader_material.load(
 	'images/water3.jpg',
 	function ( water ) {
-    var plane = new THREE.PlaneGeometry(1000,1000);
-    var material = new THREE.MeshStandardMaterial( { map: water , vertexColors: THREE.NoColors});
-    var create_plane = new THREE.Mesh(plane, material);
-    create_plane.receiveShadow = true;
-    create_plane.rotateX(-Math.PI/2);
-    scene.add(create_plane);
-    },); };
+        var plane = new THREE.PlaneGeometry(1000,1000);
+        var material = new THREE.MeshStandardMaterial( {map: water});
+        var create_plane = new THREE.Mesh(plane, material);
+        create_plane.receiveShadow = true;
+        create_plane.rotateX(-Math.PI/2);
+        scene.add(create_plane);
+        },); };
 
 // creates the two fish objects and the material 
+// fish from this source: https://poly.pizza/m/3GPUntjwqCa
 
 const fish_texture = loader_material.load('models/Tex_Goldfish.png');
 function fish_func(){
-loader_OBJ.load(
+    loader_OBJ.load(
 
 	'models/Mesh_Goldfish.obj',
   
@@ -379,9 +357,7 @@ loader_OBJ.load(
 
         const material = new THREE.MeshStandardMaterial({ map: fish_texture });
         fish.traverse( function( object ) { if ( object instanceof THREE.Mesh ) { object.castShadow = true; } } );
-        fish.traverse(function(object) { if (object instanceof THREE.Mesh) {object.material = material;
-            }
-          });
+        fish.traverse(function(object) { if (object instanceof THREE.Mesh) {object.material = material;} });
         
         fish.castShadow = true;
         fish_2 = fish_ob.clone();
@@ -392,6 +368,10 @@ loader_OBJ.load(
         scene.add(fish_2);
 
 	},
+    function ( error ) {
+		console.log('error');
+    }
+
 );};
 
 // detect the movement of the boat from keyinputs
